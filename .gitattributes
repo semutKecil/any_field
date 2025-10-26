@@ -1,2 +1,21 @@
+# Mark example directory as vendored
 example/* linguist-vendored
+example/**/* linguist-vendored
+
+# Mark platform-specific implementation code as vendored
+ios/** linguist-vendored
+android/** linguist-vendored
+linux/** linguist-vendored
+windows/** linguist-vendored
+macos/** linguist-vendored
+
+# Explicitly mark Dart as the primary language
 *.dart linguist-language=Dart
+*.h linguist-vendored
+*.m linguist-vendored
+*.mm linguist-vendored
+*.cpp linguist-vendored
+*.cc linguist-vendored
+*.swift linguist-vendored
+*.kt linguist-vendored
+*.java linguist-vendored
