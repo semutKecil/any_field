@@ -10,6 +10,11 @@ A flexible Flutter input field widget that can display arbitrary content while m
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M81N5IYI)
 
+## Quick links
+
+- [AnyField](#anyfield) — main widget documentation and API
+- [AnyFormField / Form Integration](#form-integration) — form wrapper, usage and API
+
 ## Features
 
 - 📝 Display any custom content within an input field
