@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:any_field/any_field.dart';
 import 'package:flutter/material.dart';
 
@@ -95,7 +97,7 @@ class AnyFormField<T> extends StatefulWidget {
   ///   }
   /// }
   /// ```
-  final void Function(T? value)? onTap;
+  final FutureOr Function(T? value)? onTap;
 
   /// Optional validator function called when Form.validate is called.
   ///

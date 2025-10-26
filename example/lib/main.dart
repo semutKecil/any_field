@@ -1,5 +1,6 @@
 import 'package:any_field/any_field.dart';
 import 'package:any_field/any_form_field.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,9 +34,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   final AnyValueController<String> controller = AnyValueController("value");
+  final AnyValueController<List<String>> controller2 = AnyValueController([
+    "1",
+  ]);
+  final AnyValueController<Color> colorController = AnyValueController(
+    Colors.blue,
+  );
+  String? errorText = "test";
   @override
   void dispose() {
     controller.dispose();
+    controller2.dispose();
+    colorController.dispose();
     super.dispose();
   }
 
@@ -58,11 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(height: 20),
                       AnyFormField<List<String>>(
-                        // controller: controller,
                         initialValue: ["value1", "value2", "value3", "value4"],
-                        // leftCompensation: 100,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -70,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           labelText: "Label Text",
                           errorText: "error text",
+                          helperText: "testt 123",
                           prefixIcon: Icon(Icons.ac_unit_sharp),
                           suffixIcon: Icon(Icons.baby_changing_station_sharp),
                         ),
@@ -111,22 +118,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                       SizedBox(height: 20),
-                      AnyField<String>(
-                        controller: controller,
+                      AnyField<Color>(
+                        controller: colorController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(width: 1),
                           ),
-                          labelText: "Color Picker",
+                          labelText: "Color Field",
                           hintText: "select",
                           errorText: "error text",
-                          prefixIcon: Icon(Icons.abc),
-                          // prefix: Icon(Icons.palette),
+                          prefixIcon: Icon(Icons.palette),
                         ),
-                        // leftCompensation: 250,
-                        floatingLabelHeightCompensation: 5,
-                        maxHeight: 400,
+                        topCompensation: kIsWeb ? null : 3,
                         onTap: (value) {
                           if (controller.value == null) {
                             controller.value = "waha";
@@ -140,16 +144,105 @@ class _MyHomePageState extends State<MyHomePage> {
                         displayBuilder: (context, value) {
                           return Container(
                             decoration: BoxDecoration(
-                              color: Colors.black12,
-                              border: BoxBorder.all(
-                                width: 1,
-                                color: Colors.black26,
+                              borderRadius: BorderRadius.circular(10),
+                              border: BoxBorder.all(width: 1, color: value),
+                              color: value.withAlpha(80),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircleAvatar(backgroundColor: value),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '#${value.toARGB32().toRadixString(16).padLeft(8, '0').substring(2)}',
+                                    style: TextStyle(color: value),
+                                  ),
+                                ],
                               ),
                             ),
+                          );
+                        },
+                      ),
 
-                            width: 100,
-                            height: 100,
-                            child: Center(child: Text(value)),
+                      SizedBox(height: 20),
+                      AnyField<List<String>>(
+                        controller: controller2,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(width: 1),
+                          ),
+                          labelText: "Custom Field",
+                          hintText: "select",
+                          errorText: errorText,
+                          prefixIcon: Icon(Icons.account_box),
+                        ),
+                        maxHeight: 250,
+                        onTap: (value) async {
+                          await showDialog(
+                            context: context,
+                            builder: (context) =>
+                                AlertDialog(content: Text("hhaha")),
+                          );
+                        },
+                        onChanged: (value) {
+                          print(value);
+                        },
+                        displayBuilder: (context, value) {
+                          return Wrap(
+                            spacing: 5,
+                            runSpacing: 5,
+                            children: List.generate(value.length, (index) {
+                              return Container(
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.black12,
+                                  border: BoxBorder.all(
+                                    width: 1,
+                                    color: Colors.black38,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 32,
+                                      height: 32,
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        onPressed: () {
+                                          if (controller2.value != null) {
+                                            controller2.value = List.from(
+                                              controller2.value!..removeLast(),
+                                            );
+                                          }
+                                        },
+                                        icon: Icon(Icons.close, size: 20),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                      width: 1,
+                                      child: VerticalDivider(
+                                        color: Colors.black26,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Text(value[index]),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                           );
                         },
                       ),
@@ -158,10 +251,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () => _formKey.currentState?.save(),
+                onPressed: () {
+                  controller2.value = List.from(controller2.value ?? [])
+                    ..add(((controller2.value ?? []).length + 1).toString());
+                  _formKey.currentState?.save();
+
+                  setState(() {
+                    if (errorText == null) {
+                      errorText = "new error text";
+                    } else {
+                      errorText = null;
+                    }
+                  });
+                },
                 child: SizedBox(
                   width: double.maxFinite,
-                  child: Center(child: Text("Save")),
+                  child: Center(child: Text("save")),
                 ),
               ),
             ],
