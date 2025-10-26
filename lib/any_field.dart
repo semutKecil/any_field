@@ -60,21 +60,25 @@ class AnyField<T> extends StatefulWidget {
   ///     controller.value = result;
   ///   }
   /// }
+  /// ```
   ///
-  final FutureOr Function(T? value)? onTap;
+  /// The handler may be synchronous or asynchronous (it is `FutureOr<void>`).
+  /// AnyField ignores the return value of this callback; update the controller
+  /// from inside the handler to change the field value.
+  final FutureOr<void> Function(T? value)? onTap;
 
   /// Compensation height in logical pixels for helper text area.
   ///
   /// When helper text is present, this value is used to adjust the display
   /// content position to prevent overlap with the helper area.
-  /// Defaults to 21 pixels if not specified.
+  /// Defaults to 20 pixels if not specified.
   final double? herlperHeightCompensation;
 
   /// Compensation height in logical pixels for error text area.
   ///
   /// When error text is present, this value is used to adjust the display
   /// content position to prevent overlap with the error area.
-  /// Defaults to 21 pixels if not specified.
+  /// Defaults to 20 pixels if not specified.
   final double? errorHeightCompensation;
 
   /// Compensation height in logical pixels for floating label area.
@@ -98,6 +102,13 @@ class AnyField<T> extends StatefulWidget {
   /// Defaults to 0 pixels if not specified.
   final double? rightCompensation;
 
+  /// Additional top offset in logical pixels applied to the display content.
+  ///
+  /// Useful for small vertical adjustments when decorating with helper/error text
+  /// or when using custom fonts/themes. Positive values move the content down,
+  /// negative values move it up. Compensation may be required because helper/error
+  /// area and floating label metrics differ between platforms and themes.
+  /// Defaults to 0 if not specified.
   final double? topCompensation;
 
   const AnyField({

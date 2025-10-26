@@ -1,16 +1,7 @@
 <!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
 -->
-
 # AnyField
 
 A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField.
@@ -24,13 +15,20 @@ A flexible Flutter input field widget that can display arbitrary content while m
 - 🖱️ Tap handling for custom interaction
 - ⌨️ Keyboard navigation support
 
+## Demo
+
+<!-- Use an HTML img tag to constrain the rendered size of the demo GIF -->
+<p align="center">
+  <img src="sample.gif" alt="AnyField demo" height="400" />
+</p>
+
 ## Installation
 
 Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  any_field: ^1.0.0
+  any_field: ^0.0.1
 ```
 
 ## Usage
@@ -48,7 +46,7 @@ AnyField<List<String>>(
     labelText: 'Tags',
     border: OutlineInputBorder(),
   ),
-  onTap: () => _showTagSelector(),
+  onTap: (current) => _showTagSelector(),
 )
 ```
 
@@ -69,14 +67,40 @@ AnyField<DateTime>(
     labelText: 'Date',
     suffixIcon: Icon(Icons.calendar_today),
   ),
-  onTap: () async {
+  onTap: (current) async {
     final date = await showDatePicker(...);
-    if (date != null) {
-      controller.value = date;
-    }
+    if (date != null) controller.value = date;
   },
 )
 ```
+
+## Usage notes
+
+- AnyField `onTap` accepts `FutureOr<void>` handlers. For AnyField the callback should update the controller (the return value is ignored). Example:
+```dart
+AnyField<DateTime>(
+  displayBuilder: (c, date) => Text(date == null ? 'Pick a date' : DateFormat.yMMMd().format(date)),
+  controller: controller,
+  onTap: (current) async {
+    final picked = await showDatePicker(...);
+    if (picked != null) controller.value = picked;
+  },
+)
+```
+
+- AnyField is well suited for building picker UI that opens dialogs (date picker, selection dialogs, color pickers, etc.). Use the `onTap` callback to open your dialog and update the controller when the user selects a value.
+
+## Platform & layout notes (compensation parameters)
+
+InputDecoration layout (helper text, error text, floating label) differs between platforms, themes and Flutter versions. To get pixel-perfect alignment you can use the compensation parameters:
+
+- `herlperHeightCompensation` — adjust height when helper text is present (default ~20)
+- `errorHeightCompensation` — adjust height when error text is present (default ~20)
+- `floatingLabelHeightCompensation` — top offset when floating label is used (default 0)
+- `topCompensation` — additional top offset for the display area (default 0)
+- `leftCompensation` / `rightCompensation` — horizontal fine tuning to compensate for prefix/suffix and platform differences (default 0)
+
+These values are intentionally exposed because the exact visual metrics are not the same on every platform or theme. Test on your target devices and adjust the compensation values until the display area aligns correctly with your InputDecoration.
 
 ## API Reference
 
@@ -91,10 +115,11 @@ AnyField<DateTime>(
 | `displayPadding` | `EdgeInsets?` | Padding around content |
 | `controller` | `AnyValueController<T>?` | Value controller |
 | `onChanged` | `ValueChanged<T?>?` | Value change callback |
-| `onTap` | `void Function(T? value)?` | Tap handler with current value |
-| `herlperHeightCompensation` | `double?` | Height adjustment for helper text (default: 21) |
-| `errorHeightCompensation` | `double?` | Height adjustment for error text (default: 21) |
+| `onTap` | `FutureOr<void> Function(T? value)?` | Tap handler (sync or async). Handler should update controller; return value is ignored. |
+| `herlperHeightCompensation` | `double?` | Height adjustment for helper text (default: 20) |
+| `errorHeightCompensation` | `double?` | Height adjustment for error text (default: 20) |
 | `floatingLabelHeightCompensation` | `double?` | Height adjustment for floating label (default: 0) |
+| `topCompensation` | `double?` | Extra top offset for content (default: 0) |
 | `leftCompensation` | `double?` | Additional left padding (default: 0) |
 | `rightCompensation` | `double?` | Additional right padding (default: 0) |
 
@@ -118,23 +143,26 @@ final controller = AnyValueController<List>(
 
 ## Form Integration
 
-AnyField can be used within forms using the `AnyFormField` wrapper:
+AnyField can be used within forms using the `AnyFormField` wrapper. Note: `AnyFormField.onTap` uses the same signature as `AnyField` (`FutureOr<void> Function(T? value)?`) — the callback should update the controller or call `onChanged` to apply the selected value.
 
 ```dart
+final controller = AnyValueController<DateTime?>(null);
+
 Form(
   key: _formKey,
   child: Column(
     children: [
-      AnyFormField<DateTime>(
+      AnyFormField<DateTime?>(
+        controller: controller,
         displayBuilder: (context, date) => 
-          Text(DateFormat.yMMMd().format(date)),
+          Text(date == null ? 'Pick a date' : DateFormat.yMMMd().format(date)),
         decoration: InputDecoration(
           labelText: 'Event Date',
           suffixIcon: Icon(Icons.calendar_today),
         ),
         validator: (value) {
           if (value == null) return 'Please select a date';
-          if (value.isBefore(DateTime.now())) {
+          if (value!.isBefore(DateTime.now())) {
             return 'Date must be in the future';
           }
           return null;
@@ -148,10 +176,8 @@ Form(
             lastDate: DateTime(2025),
           );
           if (date != null) {
-            // Form field handles controller internally
-            return date;
+            controller.value = date;
           }
-          return null;
         },
       ),
       ElevatedButton(
@@ -182,9 +208,9 @@ Form(
 | `validator` | `FormFieldValidator<T>?` | Form validation function |
 | `onSaved` | `FormFieldSetter<T>?` | Called when form is saved |
 | `onChanged` | `ValueChanged<T?>?` | Value change callback |
-| `onTap` | `Future<T?> Function(T? value)?` | Async tap handler returning new value |
-| `herlperHeightCompensation` | `double?` | Height adjustment for helper text (default: 21) |
-| `errorHeightCompensation` | `double?` | Height adjustment for error text (default: 21) |
+| `onTap` | `FutureOr<void> Function(T? value)?` | Tap handler (sync or async). Handler should update controller or call onChanged. |
+| `herlperHeightCompensation` | `double?` | Height adjustment for helper text (default: 20) |
+| `errorHeightCompensation` | `double?` | Height adjustment for error text (default: 20) |
 | `floatingLabelHeightCompensation` | `double?` | Height adjustment for floating label (default: 0) |
 | `leftCompensation` | `double?` | Additional left padding (default: 0) |
 | `rightCompensation` | `double?` | Additional right padding (default: 0) |
