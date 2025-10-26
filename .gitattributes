@@ -1,0 +1,2 @@
+example/* linguist-vendored
+*.dart linguist-language=Dart
