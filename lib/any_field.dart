@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// A flexible input field widget that can display arbitrary content of type [T].
@@ -137,6 +138,7 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
   late final AnyValueController<T> _controller;
   late final bool _isExternalController;
   late final _AnyCubit<T?> _fieldValue;
+  final FocusNode _focusNode = FocusNode();
   final GlobalKey _contentKey = GlobalKey();
   final GlobalKey _suffixKey = GlobalKey();
   final GlobalKey _prefixKey = GlobalKey();
@@ -222,6 +224,7 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
     _textController.dispose();
     _initialized.close();
     _contentHeight.close();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -276,6 +279,14 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
     return nh;
   }
 
+  Future<void> onFocusTap() async {
+    if (isValueEmpty()) {
+      _textController.text = " ";
+    }
+    await widget.onTap?.call(_controller.value);
+    onValueChange();
+  }
+
   @override
   Widget build(BuildContext context) {
     var decoration = decorationUpdate();
@@ -288,129 +299,146 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
             child: TextField(decoration: decoration, readOnly: true),
           );
         }
-
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return Stack(
-              children: [
-                BlocBuilder<_AnyCubit<double>, double>(
-                  bloc: _contentHeight,
-                  builder: (context, height) {
-                    return SizedBox(
-                      // key: _contentKey,
-                      height: heightCalculation(height, decoration),
-                      child: Padding(
-                        padding: widget.floatingLabelHeightCompensation == null
-                            ? EdgeInsetsGeometry.zero
-                            : EdgeInsets.only(
-                                top: widget.floatingLabelHeightCompensation!,
-                              ),
-                        child: TextField(
-                          controller: _textController,
-                          minLines: null,
-                          maxLines: null,
-                          decoration: decoration,
-                          readOnly: true,
-                          expands: true,
-                          onTap: () async {
-                            if (isValueEmpty()) {
-                              _textController.text = " ";
-                            }
-                            await widget.onTap?.call(_controller.value);
-                            onValueChange();
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                Positioned(
-                  top:
-                      (widget.topCompensation ?? 0) +
-                      (widget.floatingLabelHeightCompensation ?? 0),
-                  left: _minusPrefix + (widget.leftCompensation ?? 0),
-                  child: BlocBuilder<_AnyCubit<double>, double>(
+        return FocusableActionDetector(
+          shortcuts: {
+            LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
+          },
+          actions: {
+            ActivateIntent: CallbackAction<ActivateIntent>(
+              onInvoke: (_) {
+                if (_focusNode.hasFocus) {
+                  onFocusTap();
+                }
+                return null;
+              },
+            ),
+          },
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                children: [
+                  BlocBuilder<_AnyCubit<double>, double>(
                     bloc: _contentHeight,
-                    buildWhen: (previous, current) => previous != current,
                     builder: (context, height) {
-                      return GestureDetector(
-                        onTap: () {
-                          widget.onTap?.call(_controller.value);
-                        },
-                        child: Container(
-                          // color: Colors.amber,
-                          width:
-                              constraints.maxWidth -
-                              (_minusPrefix +
-                                  _minusSuffix +
-                                  (widget.leftCompensation ?? 0) +
-                                  (widget.rightCompensation ?? 0)),
-                          // height: height,
-                          constraints: BoxConstraints(maxHeight: height),
-                          child: Padding(
-                            padding:
-                                widget.displayPadding ??
-                                EdgeInsets.fromLTRB(5, 10, 5, 5),
-                            child:
-                                NotificationListener<ScrollMetricsNotification>(
-                                  onNotification: (notification) {
-                                    if (widget.maxHeight != null) {
-                                      var more =
-                                          notification.metrics.maxScrollExtent;
-                                      var extra =
-                                          (widget.topCompensation ?? 0) +
-                                          (widget.displayPadding?.top ?? 10) +
-                                          (widget.displayPadding?.bottom ?? 5);
-
-                                      var nh =
-                                          extra +
-                                          more +
-                                          notification
-                                              .metrics
-                                              .viewportDimension;
-
-                                      if (nh > widget.maxHeight!) {
-                                        _contentHeight.update(
-                                          widget.maxHeight!,
-                                        );
-                                      } else if (nh < _minHeight) {
-                                        _contentHeight.update(_minHeight);
-                                      } else {
-                                        _contentHeight.update(nh);
-                                      }
-                                    }
-                                    return false;
-                                  },
-                                  child: SingleChildScrollView(
-                                    child: BlocBuilder<_AnyCubit<T?>, T?>(
-                                      bloc: _fieldValue,
-                                      builder: (context, data) {
-                                        if (data == null) {
-                                          return SizedBox.shrink();
-                                        }
-                                        return Align(
-                                          alignment: AlignmentGeometry.topLeft,
-                                          child: Container(
-                                            // color: Colors.blue,
-                                            child: widget.displayBuilder(
-                                              context,
-                                              data as T,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
+                      return SizedBox(
+                        // key: _contentKey,
+                        height: heightCalculation(height, decoration),
+                        child: Padding(
+                          padding:
+                              widget.floatingLabelHeightCompensation == null
+                              ? EdgeInsetsGeometry.zero
+                              : EdgeInsets.only(
+                                  top: widget.floatingLabelHeightCompensation!,
                                 ),
+                          child: TextField(
+                            controller: _textController,
+                            focusNode: _focusNode,
+                            minLines: null,
+                            maxLines: null,
+                            decoration: decoration,
+                            readOnly: true,
+                            expands: true,
+                            onTap: () {
+                              onFocusTap();
+                            },
                           ),
                         ),
                       );
                     },
                   ),
-                ),
-              ],
-            );
-          },
+                  Positioned(
+                    top:
+                        (widget.topCompensation ?? 0) +
+                        (widget.floatingLabelHeightCompensation ?? 0),
+                    left: _minusPrefix + (widget.leftCompensation ?? 0),
+                    child: BlocBuilder<_AnyCubit<double>, double>(
+                      bloc: _contentHeight,
+                      buildWhen: (previous, current) => previous != current,
+                      builder: (context, height) {
+                        return GestureDetector(
+                          onTap: () {
+                            widget.onTap?.call(_controller.value);
+                          },
+                          child: Container(
+                            // color: Colors.amber,
+                            width:
+                                constraints.maxWidth -
+                                (_minusPrefix +
+                                    _minusSuffix +
+                                    (widget.leftCompensation ?? 0) +
+                                    (widget.rightCompensation ?? 0)),
+                            // height: height,
+                            constraints: BoxConstraints(maxHeight: height),
+                            child: Padding(
+                              padding:
+                                  widget.displayPadding ??
+                                  EdgeInsets.fromLTRB(5, 10, 5, 5),
+                              child:
+                                  NotificationListener<
+                                    ScrollMetricsNotification
+                                  >(
+                                    onNotification: (notification) {
+                                      if (widget.maxHeight != null) {
+                                        var more = notification
+                                            .metrics
+                                            .maxScrollExtent;
+                                        var extra =
+                                            (widget.topCompensation ?? 0) +
+                                            (widget.displayPadding?.top ?? 10) +
+                                            (widget.displayPadding?.bottom ??
+                                                5);
+
+                                        var nh =
+                                            extra +
+                                            more +
+                                            notification
+                                                .metrics
+                                                .viewportDimension;
+
+                                        if (nh > widget.maxHeight!) {
+                                          _contentHeight.update(
+                                            widget.maxHeight!,
+                                          );
+                                        } else if (nh < _minHeight) {
+                                          _contentHeight.update(_minHeight);
+                                        } else {
+                                          _contentHeight.update(nh);
+                                        }
+                                      }
+                                      return false;
+                                    },
+                                    child: SingleChildScrollView(
+                                      child: BlocBuilder<_AnyCubit<T?>, T?>(
+                                        bloc: _fieldValue,
+                                        builder: (context, data) {
+                                          if (data == null) {
+                                            return SizedBox.shrink();
+                                          }
+                                          return Align(
+                                            alignment:
+                                                AlignmentGeometry.topLeft,
+                                            child: Container(
+                                              // color: Colors.blue,
+                                              child: widget.displayBuilder(
+                                                context,
+                                                data as T,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );
