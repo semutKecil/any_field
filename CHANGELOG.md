@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.3 - 2025-10-26
+
+- Fixed displayPadding so displayed content aligns correctly inside decorated fields.
+- Replaced sample GIF with a smaller variant for faster README loading.
+
 ## 0.0.2 - 2025-10-26
 
 - Unified `onTap` signature to `FutureOr<void>` for `AnyField` and `AnyFormField`.
