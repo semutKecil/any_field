@@ -19,7 +19,7 @@ A flexible Flutter input field widget that can display arbitrary content while m
 
 <!-- Use an HTML img tag to constrain the rendered size of the demo GIF -->
 <p align="center">
-  <img src="sample.gif" alt="AnyField demo" height="400" />
+  <img src="screenshots/sample.gif" alt="AnyField demo" height="400" />
 </p>
 
 ## Installation
