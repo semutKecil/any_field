@@ -4,7 +4,11 @@ this README's contents appear on the landing page for your package.
 -->
 # AnyField
 
+[![pub package](https://img.shields.io/pub/v/any_field.svg)](https://pub.dev/packages/any_field) 
+
 A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M81N5IYI)
 
 ## Features
 
