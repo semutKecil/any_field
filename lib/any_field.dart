@@ -1,5 +1,27 @@
-import 'dart:async';
+/// any_field
+///
+/// A small Flutter package that provides AnyField (a flexible, read-only
+/// input-looking widget for rendering arbitrary content) and utilities like
+/// AnyValueController and AnyFormField. Use this package to build picker-style
+/// fields that keep TextField chrome while rendering custom widgets inside.
+///
+/// Example:
+/// ```dart
+/// import 'package:any_field/any_field.dart';
+///
+/// final controller = AnyValueController<DateTime?>(null);
+/// AnyField<DateTime?>(
+///   displayBuilder: (c, v) => Text(v?.toIso8601String() ?? 'Pick a date'),
+///   controller: controller,
+///   onTap: (current) async {
+///     final picked = await showDatePicker(...);
+///     if (picked != null) controller.value = picked;
+///   },
+/// );
+/// ```
+library;
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +31,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// AnyField provides a customizable input-like widget that maintains the look and feel
 /// of a TextField while allowing any content to be displayed within it.
 class AnyField<T> extends StatefulWidget {
+  /// Creates an [AnyField].
+  ///
+  /// Parameters:
+  /// - [displayBuilder]: builder that renders the current value.
+  /// - [decoration]: input decoration (label, prefix/suffix, border, etc.).
+  /// - [minHeight]/[maxHeight]: size constraints for the display area.
+  /// - [displayPadding]: padding applied around the displayed content.
+  /// - [controller]: optional [AnyValueController] that holds the value.
+  /// - [onChanged]: called when controller value changes.
+  /// - [onTap]: synchronous or asynchronous handler invoked on tap; handler
+  ///   should update the controller (return value is ignored).
+  /// - Compensation params: use to fine tune layout on different platforms.
+  const AnyField({
+    super.key,
+    required this.displayBuilder,
+    this.decoration = const InputDecoration(),
+    this.minHeight,
+    this.maxHeight,
+    this.displayPadding = EdgeInsets.zero,
+    this.controller,
+    this.onChanged,
+    this.onTap,
+    this.herlperHeightCompensation,
+    this.errorHeightCompensation,
+    this.floatingLabelHeightCompensation,
+    this.leftCompensation,
+    this.rightCompensation,
+    this.topCompensation,
+  });
+
   /// Function that builds the widget to display the current value.
   ///
   /// Called whenever the field needs to render its content. Receives the current
@@ -111,24 +163,6 @@ class AnyField<T> extends StatefulWidget {
   /// area and floating label metrics differ between platforms and themes.
   /// Defaults to 0 if not specified.
   final double? topCompensation;
-
-  const AnyField({
-    super.key,
-    required this.displayBuilder,
-    this.decoration = const InputDecoration(),
-    this.minHeight,
-    this.maxHeight,
-    this.displayPadding,
-    this.controller,
-    this.onChanged,
-    this.onTap,
-    this.herlperHeightCompensation,
-    this.errorHeightCompensation,
-    this.leftCompensation,
-    this.rightCompensation,
-    this.floatingLabelHeightCompensation,
-    this.topCompensation,
-  });
 
   @override
   State<AnyField<T>> createState() => _AnyFieldState<T>();
@@ -445,369 +479,36 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
   }
 }
 
-// class _AnyFieldCore<T> extends StatefulWidget {
-//   final Widget Function(BuildContext context, T value) displayBuilder;
-//   final InputDecoration decoration;
-//   final double minHeight;
-//   final double minusPrefix;
-//   final double minusSuffix;
-//   final double? maxHeight;
-//   final AnyValueController<T>? controller;
-
-//   final ValueChanged<T?>? onChanged;
-//   final void Function(T? value)? onTap;
-//   final EdgeInsets? displayPadding;
-
-//   final double herlperHeightCompensation;
-//   final double errorHeightCompensation;
-
-//   final double leftCompensation;
-//   final double rightCompensation;
-//   final double floatingLabelHeightCompensation;
-//   const _AnyFieldCore({
-//     required this.displayBuilder,
-//     required this.decoration,
-//     required this.minHeight,
-//     required this.minusPrefix,
-//     required this.minusSuffix,
-//     this.maxHeight,
-//     this.displayPadding,
-//     this.controller,
-//     this.onChanged,
-//     this.onTap,
-//     required this.herlperHeightCompensation,
-//     required this.errorHeightCompensation,
-//     required this.leftCompensation,
-//     required this.rightCompensation,
-//     required this.floatingLabelHeightCompensation,
-//   });
-
-//   @override
-//   State<_AnyFieldCore<T>> createState() => _AnyFieldCoreState<T>();
-// }
-
-// class _AnyFieldCoreState<T> extends State<_AnyFieldCore<T>> {
-//   final _AnyCubit<double> _heightChange = _AnyCubit(0);
-//   final TextEditingController _textController = TextEditingController();
-//   late final _AnyCubit<T?> _value;
-//   final FocusNode _focusNode = FocusNode();
-//   late final AnyValueController<T> _controller;
-//   late final bool _isExternalController;
-
-//   @override
-//   void initState() {
-//     _isExternalController = widget.controller != null;
-//     _controller = widget.controller ?? AnyValueController.empty();
-//     _heightChange.update(widget.minHeight);
-//     _value = _AnyCubit(_controller.value);
-//     if (_controller._value != null) {
-//       _textController.text = " ";
-//     } else {
-//       _textController.text = "";
-//     }
-//     _controller.addListener(onControllerChange);
-//     super.initState();
-//   }
-
-//   void onControllerChange() {
-//     _value.update(_controller.value);
-//     widget.onChanged?.call(_controller.value);
-//     if (_controller._value != null) {
-//       _textController.text = " ";
-//     } else {
-//       _textController.text = "";
-//     }
-//   }
-
-//   @override
-//   void dispose() {
-//     _controller.removeListener(onControllerChange);
-//     if (!_isExternalController) {
-//       _controller.dispose();
-//     }
-//     _textController.dispose();
-//     _heightChange.close();
-//     _value.close();
-//     _focusNode.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (context, constrains) {
-//         return BlocBuilder<_AnyCubit<double>, double>(
-//           bloc: _heightChange,
-//           builder: (context, height) {
-//             return MouseRegion(
-//               cursor: SystemMouseCursors.click,
-//               child: SizedBox(
-//                 height: height,
-//                 child: Stack(
-//                   children: [
-//                     FocusableActionDetector(
-//                       shortcuts: {
-//                         LogicalKeySet(LogicalKeyboardKey.enter):
-//                             const ActivateIntent(),
-//                       },
-//                       actions: {
-//                         ActivateIntent: CallbackAction<ActivateIntent>(
-//                           onInvoke: (_) {
-//                             if (_focusNode.hasFocus) {
-//                               widget.onTap?.call(_controller.value);
-//                             }
-//                             return null;
-//                           },
-//                         ),
-//                       },
-//                       child: Padding(
-//                         padding: widget.floatingLabelHeightCompensation == 0
-//                             ? EdgeInsetsGeometry.zero
-//                             : EdgeInsets.only(
-//                                 top: widget.floatingLabelHeightCompensation,
-//                               ),
-//                         child: TextField(
-//                           focusNode: _focusNode,
-//                           decoration: widget.decoration,
-//                           controller: _textController,
-//                           expands: true,
-//                           maxLines: null,
-//                           readOnly: true,
-//                           onTap: () {
-//                             widget.onTap?.call(_controller.value);
-//                           },
-//                         ),
-//                       ),
-//                     ),
-//                     _DisplayPosition(
-//                       hasError:
-//                           widget.decoration.error != null ||
-//                           widget.decoration.errorText != null,
-//                       hasHelper:
-//                           widget.decoration.helper != null ||
-//                           widget.decoration.helperText != null,
-//                       errorHeightCompensation: widget.errorHeightCompensation,
-//                       herlperHeightCompensation:
-//                           widget.herlperHeightCompensation,
-//                       rightCompensation: widget.rightCompensation,
-//                       leftCompensation: widget.leftCompensation,
-//                       left: widget.minusPrefix,
-//                       width:
-//                           constrains.maxWidth -
-//                           (widget.minusPrefix + widget.minusSuffix),
-//                       floatingLabelHeightCompensation:
-//                           widget.floatingLabelHeightCompensation,
-//                       child: GestureDetector(
-//                         onTap: () {
-//                           widget.onTap?.call(_controller.value);
-//                         },
-//                         child: Container(
-//                           color: Colors.transparent,
-//                           width: double.infinity,
-//                           height: double.infinity,
-//                         ),
-//                       ),
-//                     ),
-//                     _DisplayPosition(
-//                       hasError:
-//                           widget.decoration.error != null ||
-//                           widget.decoration.errorText != null,
-//                       hasHelper:
-//                           widget.decoration.helper != null ||
-//                           widget.decoration.helperText != null,
-//                       errorHeightCompensation: widget.errorHeightCompensation,
-//                       herlperHeightCompensation:
-//                           widget.herlperHeightCompensation,
-//                       rightCompensation: widget.rightCompensation,
-//                       leftCompensation: widget.leftCompensation,
-//                       left: widget.minusPrefix,
-//                       width:
-//                           constrains.maxWidth -
-//                           (widget.minusPrefix + widget.minusSuffix),
-
-//                       floatingLabelHeightCompensation:
-//                           widget.floatingLabelHeightCompensation,
-//                       child: Row(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Expanded(
-//                             child: BlocBuilder<_AnyCubit<T?>, T?>(
-//                               bloc: _value,
-//                               builder: (context, state) {
-//                                 if (state == null) {
-//                                   _heightChange.update(widget.minHeight);
-//                                   return SizedBox.shrink();
-//                                 }
-
-//                                 return _Display(
-//                                   displayBuilder: widget.displayBuilder,
-//                                   height: _heightChange.state,
-//                                   minHeight: widget.minHeight,
-//                                   state: state,
-//                                   displayPadding:
-//                                       widget.displayPadding ??
-//                                       EdgeInsets.only(
-//                                         top: 10,
-//                                         left: 5,
-//                                         right: 5,
-//                                         bottom: 5,
-//                                       ),
-//                                   maxHeight: widget.maxHeight,
-//                                   onTap: () {
-//                                     widget.onTap?.call(_controller.value);
-//                                   },
-//                                   heightChange: (newHeight) {
-//                                     _heightChange.update(newHeight);
-//                                   },
-//                                 );
-//                               },
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             );
-//           },
-//         );
-//       },
-//     );
-//   }
-// }
-
-// class _Display<T> extends StatefulWidget {
-//   final T state;
-//   final Widget Function(BuildContext context, T value) displayBuilder;
-//   final GestureTapCallback? onTap;
-//   final EdgeInsets displayPadding;
-//   final double height;
-//   final double minHeight;
-//   final void Function(double height) heightChange;
-//   final double? maxHeight;
-//   const _Display({
-//     super.key,
-//     required this.state,
-//     this.onTap,
-//     this.displayPadding = EdgeInsets.zero,
-//     required this.minHeight,
-//     this.maxHeight,
-//     required this.displayBuilder,
-//     required this.height,
-//     required this.heightChange,
-//   });
-
-//   @override
-//   State<_Display<T>> createState() => _DisplayState<T>();
-// }
-
-// class _DisplayState<T> extends State<_Display<T>> {
-//   double _viewDimension = 0;
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: widget.onTap,
-//       child: Padding(
-//         padding: widget.displayPadding,
-//         child: NotificationListener<ScrollMetricsNotification>(
-//           onNotification: (notification) {
-//             if (widget.maxHeight != null) {
-//               var more = notification.metrics.maxScrollExtent;
-//               if (more > 0) {
-//                 if ((widget.height + more) < widget.maxHeight!) {
-//                   widget.heightChange(widget.height + more);
-//                 } else {
-//                   widget.heightChange(widget.maxHeight!);
-//                 }
-//               } else if (_viewDimension > 0 &&
-//                   _viewDimension > notification.metrics.viewportDimension) {
-//                 var min =
-//                     _viewDimension - notification.metrics.viewportDimension;
-//                 if ((widget.height - min) < widget.minHeight) {
-//                   widget.heightChange(widget.minHeight);
-//                 } else {
-//                   widget.heightChange(widget.height - min);
-//                 }
-//               }
-//               _viewDimension = notification.metrics.viewportDimension;
-//             }
-
-//             return false;
-//           },
-//           child: SingleChildScrollView(
-//             child: Align(
-//               alignment: AlignmentGeometry.topLeft,
-//               child: widget.displayBuilder(context, widget.state),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class _DisplayPosition extends StatelessWidget {
-//   final bool hasError;
-//   final bool hasHelper;
-//   final double left;
-//   final double width;
-//   final Widget child;
-//   final double herlperHeightCompensation;
-//   final double errorHeightCompensation;
-//   final double rightCompensation;
-//   final double leftCompensation;
-//   final double floatingLabelHeightCompensation;
-//   const _DisplayPosition({
-//     required this.left,
-//     required this.width,
-//     required this.child,
-//     required this.hasError,
-//     required this.hasHelper,
-//     required this.herlperHeightCompensation,
-//     required this.errorHeightCompensation,
-//     required this.rightCompensation,
-//     required this.leftCompensation,
-//     required this.floatingLabelHeightCompensation,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Positioned(
-//       left: left + leftCompensation,
-//       top: floatingLabelHeightCompensation,
-//       bottom: hasError
-//           ? errorHeightCompensation
-//           : hasHelper
-//           ? herlperHeightCompensation
-//           : 0,
-//       width: width - rightCompensation,
-//       child: child,
-//     );
-//   }
-// }
-
 /// Controller for managing values in [AnyField] widgets.
 class AnyValueController<T> extends ChangeNotifier {
   /// The current value managed by this controller.
   T? _value;
 
-  /// Optional function to determine when listeners should be notified.
+  /// Optional custom comparison used to decide whether to notify listeners.
   ///
-  /// Called with the previous and new value when [value] is set.
-  /// Return true to notify listeners, false to skip notification.
+  /// Called with (previous, current) and should return true if listeners
+  /// must be notified.
   final bool Function(T previous, T current)? shouldNotify;
 
-  /// Creates a controller with an optional initial [value] and [shouldNotify] callback.
+  /// Constructs a controller initialized with [value].
   AnyValueController(this._value, {this.shouldNotify});
 
-  /// Creates an empty controller with null value.
+  /// Convenience constructor that creates an empty (null) controller.
   factory AnyValueController.empty() {
     return AnyValueController(null);
   }
 
+  /// Current value held by the controller.
+  ///
+  /// Use the setter to update the value. When setting, the controller will:
+  /// - Use [shouldNotify] if provided to determine whether listeners should be notified,
+  /// - Otherwise compare with `!=` and notify on change.
   T? get value => _value;
 
+  /// Updates the controller's value and notifies listeners if required.
+  ///
+  /// Setting this property updates the internal value and notifies registered
+  /// listeners according to the logic described above.
   set value(T? newValue) {
     final shouldUpdate =
         (_value == null && newValue != null) ||
