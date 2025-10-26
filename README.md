@@ -116,7 +116,7 @@ These values are intentionally exposed because the exact visual metrics are not 
 | `decoration` | `InputDecoration` | Standard input decoration |
 | `minHeight` | `double?` | Minimum field height |
 | `maxHeight` | `double?` | Maximum field height |
-| `displayPadding` | `EdgeInsets?` | Padding around content |
+| `displayPadding` | `EdgeInsets` | Padding around content |
 | `controller` | `AnyValueController<T>?` | Value controller |
 | `onChanged` | `ValueChanged<T?>?` | Value change callback |
 | `onTap` | `FutureOr<void> Function(T? value)?` | Tap handler (sync or async). Handler should update controller; return value is ignored. |
@@ -206,7 +206,7 @@ Form(
 | `decoration` | `InputDecoration` | Input decoration (shows validation errors) |
 | `minHeight` | `double?` | Minimum field height |
 | `maxHeight` | `double?` | Maximum field height |
-| `displayPadding` | `EdgeInsets?` | Padding around content |
+| `displayPadding` | `EdgeInsets` | Padding around content |
 | `initialValue` | `T?` | Initial value when no controller provided |
 | `controller` | `AnyValueController<T>?` | Optional external controller |
 | `validator` | `FormFieldValidator<T>?` | Form validation function |

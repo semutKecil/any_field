@@ -60,7 +60,7 @@ class AnyFormField<T> extends StatefulWidget {
   final double? maxHeight;
 
   /// Padding applied around the display content within the field.
-  final EdgeInsets? displayPadding;
+  final EdgeInsets displayPadding;
 
   /// Optional controller that manages the field's value.
   ///
@@ -164,7 +164,7 @@ class AnyFormField<T> extends StatefulWidget {
     required this.decoration,
     this.minHeight,
     this.maxHeight,
-    this.displayPadding,
+    this.displayPadding = const EdgeInsets.fromLTRB(5, 10, 5, 5),
     this.controller,
     this.onChanged,
     this.onTap,

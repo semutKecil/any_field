@@ -49,7 +49,7 @@ class AnyField<T> extends StatefulWidget {
     this.decoration = const InputDecoration(),
     this.minHeight,
     this.maxHeight,
-    this.displayPadding = EdgeInsets.zero,
+    this.displayPadding = const EdgeInsets.fromLTRB(5, 10, 5, 5),
     this.controller,
     this.onChanged,
     this.onTap,
@@ -84,7 +84,7 @@ class AnyField<T> extends StatefulWidget {
   final double? maxHeight;
 
   /// Padding applied around the display content within the field.
-  final EdgeInsets? displayPadding;
+  final EdgeInsets displayPadding;
 
   /// Controller that manages the field's value.
   ///
@@ -404,9 +404,7 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                             // height: height,
                             constraints: BoxConstraints(maxHeight: height),
                             child: Padding(
-                              padding:
-                                  widget.displayPadding ??
-                                  EdgeInsets.fromLTRB(5, 10, 5, 5),
+                              padding: widget.displayPadding,
                               child:
                                   NotificationListener<
                                     ScrollMetricsNotification
@@ -418,9 +416,8 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                                             .maxScrollExtent;
                                         var extra =
                                             (widget.topCompensation ?? 0) +
-                                            (widget.displayPadding?.top ?? 10) +
-                                            (widget.displayPadding?.bottom ??
-                                                5);
+                                            (widget.displayPadding.top) +
+                                            (widget.displayPadding.bottom);
 
                                         var nh =
                                             extra +
