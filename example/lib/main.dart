@@ -90,10 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           );
                         },
                         onChanged: (value) {
-                          print(value);
+                          debugPrint(value?.join(","));
                         },
                         onSaved: (newValue) {
-                          print(newValue);
+                          debugPrint(newValue?.join(","));
                         },
                         displayBuilder: (context, value) {
                           return Wrap(
@@ -133,13 +133,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         topCompensation: kIsWeb ? null : 3,
                         onTap: (value) {
                           if (controller.value == null) {
-                            controller.value = "waha";
+                            controller.value = "test value";
                           } else {
                             controller.value = null;
                           }
-                        },
-                        onChanged: (value) {
-                          print(value);
                         },
                         displayBuilder: (context, value) {
                           return Container(
@@ -188,11 +185,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           await showDialog(
                             context: context,
                             builder: (context) =>
-                                AlertDialog(content: Text("hhaha")),
+                                AlertDialog(content: Text("dialog test")),
                           );
                         },
                         onChanged: (value) {
-                          print(value);
+                          debugPrint(value?.join(","));
                         },
                         displayBuilder: (context, value) {
                           return Wrap(
