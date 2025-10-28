@@ -2,16 +2,14 @@
 
 ## 0.0.4 - 2025-10-26
 
-- Enhanced documentation to emphasize picker/dialog use cases
-- Improved package description and keywords for better discoverability
 - Updated README with dedicated picker examples section
 - Optimized topics for pub.dev search
 - Minor documentation improvements and clarifications
 
 ## 0.0.3 - 2025-10-26
 
-- Fixed displayPadding so displayed content aligns correctly inside decorated fields
-- Replaced sample GIF with a smaller variant for faster README loading
+- Fixed displayPadding so displayed content aligns correctly inside decorated fields.
+- Replaced sample GIF with a smaller variant for faster README loading.
 
 ## 0.0.2 - 2025-10-26
 

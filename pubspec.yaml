@@ -5,13 +5,8 @@ homepage: "https://github.com/semutKecil/any_field"
 topics:
   - custom-field
   - dynamic-field
-  - input
-  - form
-  - widget
-  - picker
-  - dialog
-  - selection
-  - datepicker
+  - custom-form
+  - data-picker
   - custom-input
 
 environment:
