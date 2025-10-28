@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.5 - 2025-10-26
+## 0.0.6 - 2025-10-26
 
 - Fix pubspec.yaml to long description
 
