@@ -6,9 +6,23 @@ this README's contents appear on the landing page for your package.
 
 [![pub package](https://img.shields.io/pub/v/any_field.svg)](https://pub.dev/packages/any_field) [![Publish to pub.dev](https://github.com/semutKecil/any_field/actions/workflows/publish.yml/badge.svg)](https://github.com/semutKecil/any_field/actions/workflows/publish.yml) [![Donate on Saweria](https://img.shields.io/badge/Donate-Saweria-orange)](https://saweria.co/hrlns)
 
-A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField.
+A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField. Particularly well-suited for building custom picker fields that open dialogs for selection (date pickers, color pickers, multi-select, etc.).
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M81N5IYI)
+## Perfect for Dialog-based Pickers
+
+AnyField is designed to be the foundation for custom picker widgets that use dialogs or bottom sheets:
+- Keep TextField's visual style (labels, borders, icons) while displaying any content
+- Built-in tap handling for opening dialogs
+- Easy integration with existing picker dialogs (DatePicker, ColorPicker, etc.)
+- Support for async operations when selecting values
+- Form-enabled wrapper for validation
+
+Common use cases:
+- Date/Time pickers with custom formats
+- Multi-select fields with chip display
+- Color pickers with preview
+- Custom dropdown alternatives
+- Any picker that needs dialog interaction
 
 ## Quick links
 
