@@ -2,6 +2,10 @@
 
 ## 0.0.5 - 2025-10-26
 
+- Fix pubspec.yaml to long description
+
+## 0.0.5 - 2025-10-26
+
 - Updated README add missing ko-fi button
 
 ## 0.0.4 - 2025-10-26

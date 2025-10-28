@@ -10,6 +10,13 @@ A flexible Flutter input field widget that can display arbitrary content while m
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M81N5IYI)
 
+## Demo
+
+<!-- Use an HTML img tag to constrain the rendered size of the demo GIF -->
+<p align="center">
+  <img src="screenshots/sample.gif" alt="AnyField demo" height="400" />
+</p>
+
 ## Perfect for Dialog-based Pickers
 
 AnyField is designed to be the foundation for custom picker widgets that use dialogs or bottom sheets:
@@ -39,13 +46,6 @@ Common use cases:
 - 🔄 Value management through controller pattern
 - 🖱️ Tap handling for custom interaction
 - ⌨️ Keyboard navigation support
-
-## Demo
-
-<!-- Use an HTML img tag to constrain the rendered size of the demo GIF -->
-<p align="center">
-  <img src="screenshots/sample.gif" alt="AnyField demo" height="400" />
-</p>
 
 ## Installation
 
