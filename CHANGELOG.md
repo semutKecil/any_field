@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5 - 2025-10-26
+
+- Updated README add missing ko-fi button
+
 ## 0.0.4 - 2025-10-26
 
 - Updated README with dedicated picker examples section

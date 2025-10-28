@@ -8,6 +8,8 @@ this README's contents appear on the landing page for your package.
 
 A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField. Particularly well-suited for building custom picker fields that open dialogs for selection (date pickers, color pickers, multi-select, etc.).
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M81N5IYI)
+
 ## Perfect for Dialog-based Pickers
 
 AnyField is designed to be the foundation for custom picker widgets that use dialogs or bottom sheets:

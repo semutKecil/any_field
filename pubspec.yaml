@@ -1,6 +1,6 @@
 name: any_field
 description: "A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField. Perfect for building custom picker fields with dialog interaction."
-version: 0.0.4
+version: 0.0.5
 homepage: "https://github.com/semutKecil/any_field"
 topics:
   - custom-field
