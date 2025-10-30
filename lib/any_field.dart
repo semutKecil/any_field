@@ -402,7 +402,19 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                                     (widget.leftCompensation ?? 0) +
                                     (widget.rightCompensation ?? 0)),
                             // height: height,
-                            constraints: BoxConstraints(maxHeight: height),
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  widget.maxHeight != null &&
+                                      height >= widget.maxHeight!
+                                  ? (height -
+                                        (widget.topCompensation ?? 0) -
+                                        (widget.floatingLabelHeightCompensation ??
+                                            0) -
+                                        (widget.herlperHeightCompensation ??
+                                            0) -
+                                        (widget.errorHeightCompensation ?? 0))
+                                  : height,
+                            ),
                             child: Padding(
                               padding: widget.displayPadding,
                               child:

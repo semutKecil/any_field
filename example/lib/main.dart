@@ -181,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           prefixIcon: Icon(Icons.account_box),
                         ),
                         maxHeight: 250,
+                        topCompensation: 10,
                         onTap: (value) async {
                           await showDialog(
                             context: context,

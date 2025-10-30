@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7 - 2025-10-30
+
+- Fix vertical offset when content height maxes out.
+
 ## 0.0.6 - 2025-10-26
 
 - Fix pubspec.yaml to long description
