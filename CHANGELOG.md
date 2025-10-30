@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.8 - 2025-10-30
+
+- Fix vertical offset when max height null.
+
 ## 0.0.7 - 2025-10-30
 
 - Fix vertical offset when content height maxes out.

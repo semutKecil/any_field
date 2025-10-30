@@ -184,6 +184,7 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
   double _minusPrefix = 0;
   double _minusSuffix = 0;
   double _minHeight = 0;
+  double _maxHeight = 0;
 
   @override
   void initState() {
@@ -220,6 +221,12 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
             widget.decoration,
           );
         }
+        if (widget.maxHeight == null) {
+          _maxHeight = _minHeight;
+        } else {
+          _maxHeight = widget.maxHeight!;
+        }
+
         _contentHeight.update(_minHeight);
         _initialized.update(true);
       }
@@ -321,6 +328,17 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
     onValueChange();
   }
 
+  double _calculateDisplayHeight(double height) {
+    // var maxHeight = widget.maxHeight ?? _minHeight;
+    return height >= _maxHeight
+        ? (height -
+              (widget.topCompensation ?? 0) -
+              (widget.floatingLabelHeightCompensation ?? 0) -
+              (widget.herlperHeightCompensation ?? 0) -
+              (widget.errorHeightCompensation ?? 0))
+        : height;
+  }
+
   @override
   Widget build(BuildContext context) {
     var decoration = decorationUpdate();
@@ -353,6 +371,7 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                 children: [
                   BlocBuilder<_AnyCubit<double>, double>(
                     bloc: _contentHeight,
+                    buildWhen: (previous, current) => previous != current,
                     builder: (context, height) {
                       return SizedBox(
                         // key: _contentKey,
@@ -403,17 +422,7 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                                     (widget.rightCompensation ?? 0)),
                             // height: height,
                             constraints: BoxConstraints(
-                              maxHeight:
-                                  widget.maxHeight != null &&
-                                      height >= widget.maxHeight!
-                                  ? (height -
-                                        (widget.topCompensation ?? 0) -
-                                        (widget.floatingLabelHeightCompensation ??
-                                            0) -
-                                        (widget.herlperHeightCompensation ??
-                                            0) -
-                                        (widget.errorHeightCompensation ?? 0))
-                                  : height,
+                              maxHeight: _calculateDisplayHeight(height),
                             ),
                             child: Padding(
                               padding: widget.displayPadding,
@@ -422,32 +431,28 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                                     ScrollMetricsNotification
                                   >(
                                     onNotification: (notification) {
-                                      if (widget.maxHeight != null) {
-                                        var more = notification
-                                            .metrics
-                                            .maxScrollExtent;
-                                        var extra =
-                                            (widget.topCompensation ?? 0) +
-                                            (widget.displayPadding.top) +
-                                            (widget.displayPadding.bottom);
+                                      var more =
+                                          notification.metrics.maxScrollExtent;
+                                      var extra =
+                                          (widget.topCompensation ?? 0) +
+                                          (widget.displayPadding.top) +
+                                          (widget.displayPadding.bottom);
 
-                                        var nh =
-                                            extra +
-                                            more +
-                                            notification
-                                                .metrics
-                                                .viewportDimension;
+                                      var nh =
+                                          extra +
+                                          more +
+                                          notification
+                                              .metrics
+                                              .viewportDimension;
 
-                                        if (nh > widget.maxHeight!) {
-                                          _contentHeight.update(
-                                            widget.maxHeight!,
-                                          );
-                                        } else if (nh < _minHeight) {
-                                          _contentHeight.update(_minHeight);
-                                        } else {
-                                          _contentHeight.update(nh);
-                                        }
+                                      if (nh > _maxHeight) {
+                                        _contentHeight.update(_maxHeight);
+                                      } else if (nh < _minHeight) {
+                                        _contentHeight.update(_minHeight);
+                                      } else {
+                                        _contentHeight.update(nh);
                                       }
+                                      // }
                                       return false;
                                     },
                                     child: SingleChildScrollView(
