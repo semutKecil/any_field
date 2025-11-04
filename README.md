@@ -47,6 +47,34 @@ Common use cases:
 - 🖱️ Tap handling for custom interaction
 - ⌨️ Keyboard navigation support
 
+---
+
+## `any_field` Changelog
+
+### v0.1.0 – InputDecorator Refactor & Alignment Reset  
+**Released:** November 4, 2025
+
+#### ✨ Major Changes
+- **Migrated core layout to `InputDecorator`**  
+  Replaced legacy composition with native `InputDecorator` for idiomatic form field rendering and label/hint behavior.
+
+- **Removed all `compensation` and `displayPadding` parameters**  
+  Simplified API surface by eliminating manual layout overrides. Alignment now follows native Flutter behavior.
+
+- **Introduced baseline-driven hint alignment strategy**  
+  Hint text alignment now respects child baseline. Developers should ensure children provide valid baselines (e.g. `Text`, `Baseline`) for proper vertical centering.
+
+#### 🧱 Architectural Improvements
+- Unified field rendering logic across dropdowns, text fields, and custom inputs.
+- Improved compatibility with form validation, focus traversal, and accessibility.
+- Reduced layout bugs related to padding compensation and vertical drift.
+
+#### 🧪 Migration Notes
+- If your field previously relied on `displayPadding` or `compensation`, you may need to adjust child height or wrap in `Baseline` to preserve hint alignment.
+- For tall fields (e.g. height ≥ 100), use `Text(' ')` or `Baseline` inside `InputDecorator` to center hint text.
+
+---
+
 ## Installation
 
 Add this to your package's `pubspec.yaml` file:
@@ -115,18 +143,6 @@ AnyField<DateTime>(
 
 - AnyField is well suited for building picker UI that opens dialogs (date picker, selection dialogs, color pickers, etc.). Use the `onTap` callback to open your dialog and update the controller when the user selects a value.
 
-## Platform & layout notes (compensation parameters)
-
-InputDecoration layout (helper text, error text, floating label) differs between platforms, themes and Flutter versions. To get pixel-perfect alignment you can use the compensation parameters:
-
-- `herlperHeightCompensation` — adjust height when helper text is present (default ~20)
-- `errorHeightCompensation` — adjust height when error text is present (default ~20)
-- `floatingLabelHeightCompensation` — top offset when floating label is used (default 0)
-- `topCompensation` — additional top offset for the display area (default 0)
-- `leftCompensation` / `rightCompensation` — horizontal fine tuning to compensate for prefix/suffix and platform differences (default 0)
-
-These values are intentionally exposed because the exact visual metrics are not the same on every platform or theme. Test on your target devices and adjust the compensation values until the display area aligns correctly with your InputDecoration.
-
 ## API Reference
 
 ### AnyField
@@ -137,16 +153,9 @@ These values are intentionally exposed because the exact visual metrics are not 
 | `decoration` | `InputDecoration` | Standard input decoration |
 | `minHeight` | `double?` | Minimum field height |
 | `maxHeight` | `double?` | Maximum field height |
-| `displayPadding` | `EdgeInsets` | Padding around content |
 | `controller` | `AnyValueController<T>?` | Value controller |
 | `onChanged` | `ValueChanged<T?>?` | Value change callback |
 | `onTap` | `FutureOr<void> Function(T? value)?` | Tap handler (sync or async). Handler should update controller; return value is ignored. |
-| `herlperHeightCompensation` | `double?` | Height adjustment for helper text (default: 20) |
-| `errorHeightCompensation` | `double?` | Height adjustment for error text (default: 20) |
-| `floatingLabelHeightCompensation` | `double?` | Height adjustment for floating label (default: 0) |
-| `topCompensation` | `double?` | Extra top offset for content (default: 0) |
-| `leftCompensation` | `double?` | Additional left padding (default: 0) |
-| `rightCompensation` | `double?` | Additional right padding (default: 0) |
 
 ### AnyValueController
 
@@ -227,18 +236,12 @@ Form(
 | `decoration` | `InputDecoration` | Input decoration (shows validation errors) |
 | `minHeight` | `double?` | Minimum field height |
 | `maxHeight` | `double?` | Maximum field height |
-| `displayPadding` | `EdgeInsets` | Padding around content |
 | `initialValue` | `T?` | Initial value when no controller provided |
 | `controller` | `AnyValueController<T>?` | Optional external controller |
 | `validator` | `FormFieldValidator<T>?` | Form validation function |
 | `onSaved` | `FormFieldSetter<T>?` | Called when form is saved |
 | `onChanged` | `ValueChanged<T?>?` | Value change callback |
 | `onTap` | `FutureOr<void> Function(T? value)?` | Tap handler (sync or async). Handler should update controller or call onChanged. |
-| `herlperHeightCompensation` | `double?` | Height adjustment for helper text (default: 20) |
-| `errorHeightCompensation` | `double?` | Height adjustment for error text (default: 20) |
-| `floatingLabelHeightCompensation` | `double?` | Height adjustment for floating label (default: 0) |
-| `leftCompensation` | `double?` | Additional left padding (default: 0) |
-| `rightCompensation` | `double?` | Additional right padding (default: 0) |
 
 ## Additional Information
 

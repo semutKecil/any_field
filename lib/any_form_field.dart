@@ -59,9 +59,6 @@ class AnyFormField<T> extends StatefulWidget {
   /// Content that would cause the field to exceed this height will scroll.
   final double? maxHeight;
 
-  /// Padding applied around the display content within the field.
-  final EdgeInsets displayPadding;
-
   /// Optional controller that manages the field's value.
   ///
   /// If not provided, an internal controller will be created using [initialValue].
@@ -114,69 +111,18 @@ class AnyFormField<T> extends StatefulWidget {
   /// Use this to persist the field's value when the form is saved.
   final FormFieldSetter<T>? onSaved;
 
-  /// Compensation height in logical pixels for helper text area.
-  ///
-  /// When helper text is present, this value is used to adjust the display
-  /// content position to prevent overlap with the helper area.
-  /// Defaults to 20 pixels if not specified.
-  final double? herlperHeightCompensation;
-
-  /// Compensation height in logical pixels for error text area.
-  ///
-  /// When error text is present, this value is used to adjust the display
-  /// content position to prevent overlap with the error area.
-  /// Defaults to 20 pixels if not specified.
-  final double? errorHeightCompensation;
-
-  /// Compensation height in logical pixels for floating label area.
-  ///
-  /// When using a floating label (InputDecoration.floatingLabelBehavior),
-  /// this value adjusts the content position to prevent overlap with the label.
-  /// Defaults to 0 pixels if not specified.
-  final double? floatingLabelHeightCompensation;
-
-  /// Additional padding from the left edge in logical pixels.
-  ///
-  /// Use this to fine-tune the content position from the left edge of the field.
-  /// Positive values move content right, negative values move it left.
-  /// Defaults to 0 pixels if not specified.
-  final double? leftCompensation;
-
-  /// Additional padding from the right edge in logical pixels.
-  ///
-  /// Use this to fine-tune the content position from the right edge of the field.
-  /// Positive values move content left, negative values move it right.
-  /// Defaults to 0 pixels if not specified.
-  final double? rightCompensation;
-
-  /// Additional top offset in logical pixels applied to the display content.
-  ///
-  /// Useful for small vertical adjustments when decorating with helper/error text
-  /// or when using custom fonts/themes. Positive values move the content down,
-  /// negative values move it up. Compensation may be required because helper/error
-  /// area and floating label metrics differ between platforms and themes.
-  /// Defaults to 0 if not specified.
-  final double? topCompensation;
-
   const AnyFormField({
     super.key,
     required this.displayBuilder,
     required this.decoration,
     this.minHeight,
     this.maxHeight,
-    this.displayPadding = const EdgeInsets.fromLTRB(5, 10, 5, 5),
     this.controller,
     this.onChanged,
     this.onTap,
     this.initialValue,
     this.validator,
     this.onSaved,
-    this.herlperHeightCompensation,
-    this.errorHeightCompensation,
-    this.leftCompensation,
-    this.rightCompensation,
-    this.floatingLabelHeightCompensation,
-    this.topCompensation,
   });
 
   @override
@@ -211,20 +157,12 @@ class _AnyFormFieldState<T> extends State<AnyFormField<T>> {
           displayBuilder: widget.displayBuilder,
           controller: _controller,
           decoration: widget.decoration.copyWith(errorText: field.errorText),
-          displayPadding: widget.displayPadding,
           maxHeight: widget.maxHeight,
           minHeight: widget.minHeight,
           onChanged: (value) {
             field.didChange(value);
           },
           onTap: widget.onTap,
-          herlperHeightCompensation: widget.herlperHeightCompensation,
-          errorHeightCompensation: widget.errorHeightCompensation,
-          rightCompensation: widget.rightCompensation,
-          leftCompensation: widget.leftCompensation,
-          floatingLabelHeightCompensation:
-              widget.floatingLabelHeightCompensation,
-          topCompensation: widget.topCompensation,
         );
       },
     );

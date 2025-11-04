@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0 - 2025-11-04
+
+- **Migrated core layout to `InputDecorator`**  
+  Replaced legacy composition with native `InputDecorator` for idiomatic form field rendering and label/hint behavior.
+
+- **Removed all `compensation` and `displayPadding` parameters**  
+  Simplified API surface by eliminating manual layout overrides. Alignment now follows native Flutter behavior.
+  
 ## 0.0.8 - 2025-10-30
 
 - Fix vertical offset when max height null.

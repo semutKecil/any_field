@@ -80,7 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           prefixIcon: Icon(Icons.ac_unit_sharp),
                           suffixIcon: Icon(Icons.baby_changing_station_sharp),
                         ),
-                        maxHeight: 300,
+                        // maxHeight: 300,
+                        minHeight: 100,
                         onTap: (value) {
                           showDialog(
                             context: context,
@@ -130,7 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           errorText: "error text",
                           prefixIcon: Icon(Icons.palette),
                         ),
-                        topCompensation: kIsWeb ? null : 3,
                         onTap: (value) {
                           if (controller.value == null) {
                             controller.value = "test value";
@@ -146,19 +146,22 @@ class _MyHomePageState extends State<MyHomePage> {
                               color: value.withAlpha(80),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SizedBox(
-                                    width: 20,
-                                    height: 20,
+                                    width: 14,
+                                    height: 14,
                                     child: CircleAvatar(backgroundColor: value),
                                   ),
                                   SizedBox(width: 5),
                                   Text(
                                     '#${value.toARGB32().toRadixString(16).padLeft(8, '0').substring(2)}',
-                                    style: TextStyle(color: value),
+                                    style: TextStyle(
+                                      color: value,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -181,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           prefixIcon: Icon(Icons.account_box),
                         ),
                         maxHeight: 250,
-                        topCompensation: 10,
+                        minHeight: 100,
                         onTap: (value) async {
                           await showDialog(
                             context: context,
