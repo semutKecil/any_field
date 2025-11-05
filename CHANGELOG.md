@@ -1,4 +1,7 @@
 # Changelog
+## 0.1.1 - 2025-11-05
+
+- InputDecoration are fixed to dense:true to get more space
 
 ## 0.1.0 - 2025-11-04
 

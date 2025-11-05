@@ -130,7 +130,6 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
   }
 
   bool isValueEmpty(T? value) {
-    // var value = _controller.value;
     if (value != null) {
       if (value is List && value.isEmpty) {
         return true;
@@ -194,10 +193,10 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                 return InputDecorator(
                   isEmpty: isValueEmpty(state),
                   isFocused: focus,
-                  decoration: widget.decoration,
+                  decoration: widget.decoration.copyWith(isDense: true),
                   child: Container(
                     height: widget.minHeight == null && widget.maxHeight == null
-                        ? 25
+                        ? 32
                         : null,
                     constraints:
                         widget.minHeight != null && widget.maxHeight != null

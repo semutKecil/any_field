@@ -81,7 +81,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  any_field: ^0.0.1
+  any_field: ^0.1.1
 ```
 
 ## Usage
@@ -249,6 +249,10 @@ Form(
 - Supports keyboard focus and navigation
 - Automatically handles scroll when content exceeds maxHeight
 - Compatible with Form widgets and validation
+
+## Contributing
+
+Contributions are welcome! If you have ideas, bug reports, or feature requests, feel free to open an issue or pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
