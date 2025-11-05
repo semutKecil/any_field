@@ -1,4 +1,14 @@
 # Changelog
+
+## 0.1.2 - 2025-11-05
+
+#### 🐛 Bug Fixes
+- Fixed `minHeight` behavior when set to `null` — now defaults gracefully without layout issues.
+
+#### 📚 Documentation
+- Added README notes clarifying that `isDense` is always `true`. When using `prefixIcon` or `suffixIcon`, developers should explicitly set `Icon(size: 24)` to match native `TextField` alignment.
+
+
 ## 0.1.1 - 2025-11-05
 
 - InputDecoration are fixed to dense:true to get more space

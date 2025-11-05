@@ -210,7 +210,10 @@ class _AnyFieldState<T> extends State<AnyField<T>> {
                                   maxHeight: widget.minHeight!,
                                 )
                               : widget.maxHeight != null
-                              ? BoxConstraints(maxHeight: widget.maxHeight!)
+                              ? BoxConstraints(
+                                  maxHeight: widget.maxHeight!,
+                                  minHeight: 32,
+                                )
                               : null),
                     child: isValueEmpty(state)
                         ? SizedBox.shrink()

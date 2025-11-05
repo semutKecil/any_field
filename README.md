@@ -129,6 +129,20 @@ AnyField<DateTime>(
 
 ## Usage notes
 
+To maintain consistent vertical spacing and alignment, `AnyField` sets `InputDecoration.isDense = true` by default. This affects the layout of prefix/suffix icons:
+
+- **If you're using `prefixIcon` or `suffixIcon`**, make sure to set their size to `24.0` to match the default `TextField` appearance.
+
+```dart
+InputDecoration(
+  labelText: 'Example',
+  prefixIcon: Icon(Icons.tag, size: 24), // Match TextField default
+)
+```
+
+This ensures your icons align properly with the text and hint, especially when using custom widgets or tall content inside `AnyField`.
+
+
 - AnyField `onTap` accepts `FutureOr<void>` handlers. For AnyField the callback should update the controller (the return value is ignored). Example:
 ```dart
 AnyField<DateTime>(
