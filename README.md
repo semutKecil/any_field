@@ -4,11 +4,58 @@ this README's contents appear on the landing page for your package.
 -->
 # AnyField
 
-[![pub package](https://img.shields.io/pub/v/any_field.svg)](https://pub.dev/packages/any_field) [![Publish to pub.dev](https://github.com/semutKecil/any_field/actions/workflows/publish.yml/badge.svg)](https://github.com/semutKecil/any_field/actions/workflows/publish.yml) [![Donate on Saweria](https://img.shields.io/badge/Donate-Saweria-orange)](https://saweria.co/hrlns)
+[![pub package](https://img.shields.io/pub/v/any_field.svg)](https://pub.dev/packages/any_field) ![Platform](https://img.shields.io/badge/platform-flutter-blue) [![publish](https://github.com/semutKecil/any_field/actions/workflows/publish.yml/badge.svg)](https://github.com/semutKecil/any_field/actions/workflows/publish.yml) [![Donate on Saweria](https://img.shields.io/badge/Donate-Saweria-orange)](https://saweria.co/hrlns) [![Donate on Ko-fi](https://img.shields.io/badge/Donate-Ko--fi-ff5f5f?logo=ko-fi&logoColor=white&style=flat)](https://ko-fi.com/M4M81N5IYI)
 
 A flexible Flutter input field widget that can display arbitrary content while maintaining the look and feel of a TextField. Particularly well-suited for building custom picker fields that open dialogs for selection (date pickers, color pickers, multi-select, etc.).
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M81N5IYI)
+
+## How to Contribute
+
+Before diving into the docs, here’s how you can support the plugin:
+
+- 🐞 **Found a bug or have an idea?**  
+  Open an issue on [GitHub](https://github.com/semutKecil/any_field/issues)
+
+- 🔧 **Got time to fix it?**  
+  Fork the repo and submit a pull request—we’ll review it fast
+
+- 💖 **Want to support the project?**  
+  If this plugin makes your life easier, a small donation helps us keep building and improving it for everyone 
+  
+  [![Donate on Saweria](https://img.shields.io/badge/Donate-Saweria-orange)](https://saweria.co/hrlns) [![Donate on Ko-fi](https://img.shields.io/badge/Donate-Ko--fi-ff5f5f?logo=ko-fi&logoColor=white&style=flat)](https://ko-fi.com/M4M81N5IYI)
+
+- 👍 **Like what you see?**  
+  Smash the thumbs-up on pub.dev—it helps more devs discover us!
+
+---
+
+## Table of contents
+
+- [AnyField](#anyfield)
+  - [How to Contribute](#how-to-contribute)
+  - [Table of contents](#table-of-contents)
+  - [Demo](#demo)
+  - [Perfect for Dialog-based Pickers](#perfect-for-dialog-based-pickers)
+  - [Features](#features)
+  - [`any_field` Changelog](#any_field-changelog)
+    - [v0.1.0 – InputDecorator Refactor \& Alignment Reset](#v010--inputdecorator-refactor--alignment-reset)
+      - [✨ Major Changes](#-major-changes)
+      - [🧱 Architectural Improvements](#-architectural-improvements)
+      - [🧪 Migration Notes](#-migration-notes)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Basic Example](#basic-example)
+    - [With Controller](#with-controller)
+  - [Usage notes](#usage-notes)
+  - [API Reference](#api-reference)
+    - [AnyField](#anyfield-1)
+    - [AnyValueController](#anyvaluecontroller)
+  - [Form Integration](#form-integration)
+    - [AnyFormField API](#anyformfield-api)
+  - [Additional Information](#additional-information)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Demo
 
@@ -33,10 +80,7 @@ Common use cases:
 - Custom dropdown alternatives
 - Any picker that needs dialog interaction
 
-## Quick links
 
-- [AnyField](#anyfield) — main widget documentation and API
-- [AnyFormField / Form Integration](#form-integration) — form wrapper, usage and API
 
 ## Features
 

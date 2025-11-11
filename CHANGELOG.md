@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3 - 2025-11-11
+
+- Updated `README.md`:
+  - Update how to contribute section
+
 ## 0.1.2 - 2025-11-05
 
 #### 🐛 Bug Fixes
